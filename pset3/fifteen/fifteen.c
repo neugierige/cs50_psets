@@ -159,7 +159,21 @@ void greet(void)
  */
 void init(void)
 {
-    // TODO
+    int maxIndex = (d*d)-1;
+    for (int i = 0; i < d; i++) {
+        for (int j = 0; j < d; j++) {
+            board[i][j] = maxIndex;
+            maxIndex--;
+        }
+    }
+    
+    int dIndex = d-1;
+    if (d%2 == 0) {
+        board[dIndex][dIndex-2] = 1;
+        board[dIndex][dIndex-1] = 2;
+    }
+    
+    board[dIndex][dIndex] = 0;
 }
 
 /**
@@ -167,7 +181,16 @@ void init(void)
  */
 void draw(void)
 {
-    // TODO
+    for (int i = 0; i < d; i++) {
+        for (int j = 0; j < d; j++) {
+            if (i == d-1 && j == d-1) {
+                printf("%2s", "*");
+            } else {
+                printf("%2d", board[i][j]);
+            }       
+        }
+        printf("\n");
+    }
 }
 
 /**
