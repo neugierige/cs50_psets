@@ -122,7 +122,6 @@ int main(int argc, string argv[])
             printf("\nIllegal move.\n");
             usleep(500000);
         }
-
         // sleep thread for animation's sake
         usleep(500000);
     }
@@ -172,7 +171,6 @@ void init(void)
         board[dIndex][dIndex-2] = 1;
         board[dIndex][dIndex-1] = 2;
     }
-    
     board[dIndex][dIndex] = 0;
 }
 
@@ -183,7 +181,7 @@ void draw(void)
 {
     for (int i = 0; i < d; i++) {
         for (int j = 0; j < d; j++) {
-            if (i == d-1 && j == d-1) {
+            if (board[i][j] == 0) {
                 printf("%2s", "*");
             } else {
                 printf("%2d", board[i][j]);
@@ -200,8 +198,36 @@ void draw(void)
 bool move(int tile)
 {
     // TODO
+    int row, column;
+    for (int i = 0; i < d; i++) {
+        for (int j = 0; j < d; j++) {
+            if (board[i][j] == 0) {
+                row = i;
+                column = j;
+            }
+        }
+    }
+    
+    if (board[row][column-1] == tile) {
+        board[row][column-1] = 0;
+        board[row][column] = tile;
+        return true;
+    } else if (board[row][column+1] == tile) {
+        board[row][column+1] = 0;
+        board[row][column] = tile;
+        return true;
+    } else if (board[row-1][column] == tile) {
+        board[row-1][column] = 0;
+        board[row][column] = tile;
+        return true;
+    } else if (board[row+1][column] == tile) {
+        board[row+1][column] = 0;
+        board[row][column] = tile;
+        return true;
+    }
     return false;
 }
+
 
 /**
  * Returns true if game is won (i.e., board is in winning configuration), 
@@ -209,6 +235,17 @@ bool move(int tile)
  */
 bool won(void)
 {
-    // TODO
-    return false;
+    int tileNum = 0;
+    for (int i = 0; i < d; i++) {
+        for (int j = 0; j < d; j++) {
+            if (board[i][j] == (d*i)+j+1) {
+                tileNum++;
+            }
+        }
+    }
+    if (tileNum == d*d-1) {
+        return true;
+    } else {
+        return false;
+    }
 }
