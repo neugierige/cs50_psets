@@ -739,11 +739,6 @@ bool parse(const char* line, char* abs_path, char* query)
     char* address_end = strrchr(line, 32);
     // ' HTTP/1.1'
 
-    if (strncmp(address_start, "/", 1) != 0) {
-        error(501);
-        return false;
-    }
-
     if (strcmp(address_end, " HTTP/1.1\r\n") != 0) {
         error(505);
         return false;
@@ -751,7 +746,16 @@ bool parse(const char* line, char* abs_path, char* query)
 
     char path[address_end - address_start +1];
     strncpy(path, address_start, address_end - address_start);
+
+
+    if (path[0] != '/')
+    {
+        error(501);
+        return false;
+    }
+
     path[address_end - address_start] = '\0';
+    // printf("path is first %s\n", path);
 
     char* name_input = strstr(path, "name=");
     if (name_input != NULL)
